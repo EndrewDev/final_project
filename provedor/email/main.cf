@@ -9,7 +9,7 @@
 
 myorigin = asa.br
 
-# smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+# smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu) "servidor de teste de email"
 smtpd_banner = ASA ESMTP Server
 biff = no
 
@@ -38,15 +38,16 @@ smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_una
 
 #myhostname = localhost
 
-myhostname = mail.asa.br
+myhostname = endrew@lenovo.localdomain
 
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 
 mydestination = $myhostname,  $myorigin, localhost, localhost.localdomain, localhost
 relayhost = 
-mynetworks = 127.0.0.0/8 10.24.4.224/16 172.17.0.0/16 [::ffff:127.0.0.0]/104 [::1]/128 
+mynetworks = 127.0.0.0/8 192.168.0.8/24 172.17.0.0/16 [::ffff:127.0.0.0]/104 [::1]/128 
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_interfaces = all
 inet_protocols = all
+home_mailbox=Maildir/
