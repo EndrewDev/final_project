@@ -7,7 +7,7 @@
 
 # myorigin = /etc/mailname
 
-myorigin = asa.br
+myorigin = com.br # estava asa.br mudei para com.br
 
 # smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu) "servidor de teste de email"
 smtpd_banner = ASA ESMTP Server
