@@ -17,15 +17,15 @@ COPY ./dovecot/10-auth.conf /etc/dovecot/conf.d
 
 # Add User
 # Add User
-RUN useradd -m noah
-RUN useradd -m deb
-RUN useradd -m endrew
-RUN useradd -m redes
+RUN useradd -m areiapreta
+RUN useradd -m miami
+RUN useradd -m artista
+RUN useradd -m pipa
 # Set user passord
-RUN echo "noah:redes"|chpasswd
-RUN echo "deb:redes"|chpasswd
-RUN echo "endrew:redes"|chpasswd
-RUN echo "redes:redes"|chpasswd
+RUN echo "areiapreta:redes"|chpasswd
+RUN echo "miami:redes"|chpasswd
+RUN echo "artista:redes"|chpasswd
+RUN echo "pipa:redes"|chpasswd
 
 CMD ["sh", "-c", "service syslog-ng start ; service postfix start ; service dovecot start; tail -F /var/log/mail.log"]
 
