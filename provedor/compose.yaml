@@ -13,7 +13,7 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    container_name: proxy_container
+    container_name: proxy_container # Criar ou mudar o nome de um existente
     ports:
       - "80:80/tcp"
     networks:
@@ -23,7 +23,7 @@ services:
     build:
       context: ./email
       dockerfile: Dockerfile
-    container_name: email_container
+    container_name: email
     ports:
       - "25:25/tcp"   # SEMP
       - "587:587/tcp" # SMP Client
