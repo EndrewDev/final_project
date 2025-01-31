@@ -13,4 +13,3 @@ $TTL	604800
 @			IN	A		192.168.0.8
 mail		IN	A		192.168.0.8
 portal		IN	CNAME	mail
-areiapreta	IN	CNAME	mail
