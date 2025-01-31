@@ -3,13 +3,15 @@
 ;
 $TTL	604800
 @	IN	SOA	ns.areiapreta.com.br. root.areiapreta.com.br. (
-			      1		; Serial
+			      2		; Serial
 			 604800		; Refresh
 			  86400		; Retry
 			2419200		; Expire
 			 604800 )	; Negative Cache TTL
 ;
-@			IN	NS		ns.
-@			IN	A		192.168.0.8
+@			IN	NS		ns.areiapreta.com.br.
+@			IN	A 		192.168.0.8
+ns			IN	A		192.168.0.8
 mail		IN	A		192.168.0.8
-portal		IN	CNAME	mail
+portal		IN	CNAME	mail.areiapreta.com.br.
+@			IN	MX 	10	mail.areiapreta.com.br.
