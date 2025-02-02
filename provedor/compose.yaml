@@ -32,6 +32,41 @@ services:
     networks:
       - asa-networks
 
+  mailserver:
+    image: mailu/mailu:latest  # Certifique-se de usar a versão correta aqui
+    container_name: mailserver
+    restart: always
+    env_file: .env
+    volumes:
+      - ./mailserver/data:/data
+      - ./mailserver/config:/config
+      - ./mailserver/logs:/var/log/mail
+    ports:
+      - "25:25/tcp"   # SMTP
+      - "587:587/tcp" # Submission
+      - "465:465/tcp" # SMTPs
+      - "993:993/tcp" # IMAPS
+      - "995:995/tcp" # POP3S
+    networks:
+      - asa-networks
+
+
+  webmail:
+    image: roundcube/roundcubemail
+    container_name: roundcube
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mail.exemplo.com
+      - ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.exemplo.com
+      - ROUNDCUBEMAIL_SMTP_USER="%u"
+      - ROUNDCUBEMAIL_SMTP_PASS="%p"
+    networks:
+      - asa-networks
+    depends_on:
+      - mailserver
+
 networks:
   asa-networks:
     driver: bridge
