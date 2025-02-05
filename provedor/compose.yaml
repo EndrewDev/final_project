@@ -39,8 +39,8 @@ services:
     ports:
       - "8080:80"  # Roundcube acessível via http://localhost:8080
     environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=${ROUNDCUBEMAIL_DEFAULT_HOST}
-      - ROUNDCUBEMAIL_SMTP_SERVER=${ROUNDCUBEMAIL_SMTP_SERVER}
+      - ROUNDCUBEMAIL_DEFAULT_HOST=imap://email
+      - ROUNDCUBEMAIL_SMTP_SERVER=smtp://email
     volumes:
       - ./roundcube/data:/var/www/html
     networks:
