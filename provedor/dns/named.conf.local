@@ -6,7 +6,7 @@ zone "areiapreta.com.br"{
     type master;
     file "/etc/bind/db.areiapreta.com.br";
     allow-transfer {
-        192.168.0.8;
+        127.0.0.1;
     };
 };
 

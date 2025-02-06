@@ -6,8 +6,8 @@ services:
     container_name: dns_container
     ports:
       - "53:53/udp"
-    networks:
-      - asa-networks
+    # networks:
+    #   - asa-networks
   
   proxy:
     build:
@@ -36,8 +36,8 @@ services:
     image: roundcube/roundcubemail
     container_name: roundcube
     restart: always
-    ports:
-      - "8080:80"  # Roundcube acessível via http://localhost:8080
+    #ports:
+    #  - "8080:80"  # Roundcube acessível via http://localhost:8080
     environment:
       - ROUNDCUBEMAIL_DEFAULT_HOST=imap://email
       - ROUNDCUBEMAIL_SMTP_SERVER=smtp://email

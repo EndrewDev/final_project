@@ -14,4 +14,5 @@ $TTL	604800
 ns			IN	A		192.168.0.8
 mail		IN	A		192.168.0.8
 portal		IN	CNAME	mail.areiapreta.com.br.
+webmail		IN	CNAME	mail.areiapreta.com.br.
 @			IN	MX 	10	mail.areiapreta.com.br.
