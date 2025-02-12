@@ -1,41 +1,74 @@
 services:
-  dns:
-    build:
-      context: C:\Users\20211014050023\final_project\provedor\dns\
-      dockerfile: Dockerfile
-    container_name: dns_container
+# web1 config
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    expose:
+      - 3306
+      - 33060
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wp_data:/var/www/html
     ports:
-      - "53:53/udp"
+      - 80:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
 
-  proxy:
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    container_name: proxy_container
+# web2 config
+  db2:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data2:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    expose:
+      - 3306
+      - 33060
+  wordpress2:
+    image: wordpress:latest
+    volumes:
+      - wp_data2:/var/www/html
     ports:
-      - "80:80/tcp"
-    depends_on:
-      - web_1
-      - web_2
-    networks:
-      - asa_network
+      - 9090:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db2
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
 
-  web_1:
-    build:
-      context: ./web_1
-      dockerfile: Dockerfile
-    container_name: web1_container
-    networks:
-      - asa_network
 
-  web_2:
-    build:
-      context: ./web_2
-      dockerfile: Dockerfile
-    container_name: web2_container
-    networks:
-      - asa_network
 
-networks:
-  asa_network:
-    driver: bridge
+volumes:
+  # web1
+  db_data:
+  wp_data:
+  # web2
+  db_data2:
+  wp_data2:
+
+
