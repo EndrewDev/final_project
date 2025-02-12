@@ -1,16 +1,24 @@
-servce:
+services:
+  dns:
+    build:
+      context: C:\Users\20211014050023\final_project\provedor\dns\
+      dockerfile: Dockerfile
+    container_name: dns_container
+    ports:
+      - "53:53/udp"
+
   proxy:
     build:
       context: ./proxy
       dockerfile: Dockerfile
     container_name: proxy_container
     ports:
-      - '80:80/tcp'
+      - "80:80/tcp"
     depends_on:
       - web_1
       - web_2
     networks:
-      - asa_networks
+      - asa_network
 
   web_1:
     build:
@@ -18,7 +26,7 @@ servce:
       dockerfile: Dockerfile
     container_name: web1_container
     networks:
-      - asa_networks
+      - asa_network
 
   web_2:
     build:
@@ -26,8 +34,8 @@ servce:
       dockerfile: Dockerfile
     container_name: web2_container
     networks:
-      - asa_networks
+      - asa_network
 
 networks:
-  asa-network:
+  asa_network:
     driver: bridge
