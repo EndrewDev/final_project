@@ -13,9 +13,12 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    container_name: proxy_container # Criar ou mudar o nome de um existente
+    container_name: proxy_container
     ports:
       - "80:80/tcp"
+    # depends_on:
+    #   - client_1
+      # - clinet_2
     networks:
       - asa-networks
   

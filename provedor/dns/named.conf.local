@@ -2,9 +2,9 @@
 // Do any local configuration here
 //
 
-zone "areiapreta.com.br"{
+zone "welcome.com.br"{
     type master;
-    file "/etc/bind/db.areiapreta.com.br";
+    file "/etc/bind/db.welcome.com.br";
     allow-transfer {
         127.0.0.1;
     };

@@ -79,6 +79,7 @@ class rcmail_oauth
             'verify_peer'     => $this->rcmail->config->get('oauth_verify_peer', true),
             'auth_parameters' => $this->rcmail->config->get('oauth_auth_parameters', []),
             'login_redirect'  => $this->rcmail->config->get('oauth_login_redirect', false),
+            'password_claim'  => $this->rcmail->config->get('oauth_password_claim'),
         ];
     }
 
@@ -120,10 +121,19 @@ class rcmail_oauth
      */
     public function get_redirect_uri()
     {
-        $url = $this->rcmail->url([], true, true);
+        $url = $this->rcmail->url([]);
 
         // rewrite redirect URL to not contain query parameters because some providers do not support this
         $url = preg_replace('/\?.*/', '', $url);
+
+        // Get rid of the use_secure_urls token from the path
+        // It can happen after you log out that the token is still in the current request path
+        if ($len = $this->rcmail->config->get('use_secure_urls')) {
+             $length = $len > 1 ? $len : 16;
+             $url = preg_replace("~^/[0-9a-zA-Z]{{$length}}/~", '/', $url);
+        }
+
+        $url = rcube_utils::resolve_url($url);
 
         return slashify($url) . 'index.php/login/oauth';
     }
@@ -287,6 +297,19 @@ class rcmail_oauth
                     }
 
                     $data['identity'] = $username;
+                    $data['auth_type'] = 'XOAUTH2';
+
+                    // Backends with no XOAUTH2/OAUTHBEARER support
+                    if ($pass_claim = $this->options['password_claim']) {
+                       if (empty($identity[$pass_claim])) {
+                            throw new Exception("Password claim ({$pass_claim}) not found");
+                        }
+
+                        $authorization = $identity[$pass_claim];
+                        unset($identity[$pass_claim]);
+                        unset($data['auth_type']);
+                    }
+
                     $this->mask_auth_data($data);
 
                     $this->rcmail->session->remove('oauth_state');
@@ -387,9 +410,33 @@ class rcmail_oauth
             if (!empty($data['access_token'])) {
                 // update access token stored as password
                 $authorization = sprintf('%s %s', $data['token_type'], $data['access_token']);
+
+                // decode JWT id_token if provided
+                if (!empty($data['id_token'])) {
+                    try {
+                        $identity = $this->jwt_decode($data['id_token']);
+                    } catch (\Exception $e) {
+                        // log error
+                        rcube::raise_error([
+                                'message' => $e->getMessage(),
+                                'file'    => __FILE__,
+                                'line'    => __LINE__,
+                            ], true, false
+                        );
+                    }
+                }
+
+                // Backends with no XOAUTH2/OAUTHBEARER support
+                if (($pass_claim = $this->options['password_claim']) && isset($identity[$pass_claim])) {
+                    $authorization = $identity[$pass_claim];
+                }
+
                 $_SESSION['password'] = $this->rcmail->encrypt($authorization);
 
                 $this->mask_auth_data($data);
+
+                // remove some data we don't want to store in session
+                unset($data['id_token']);
 
                 // update session data
                 $_SESSION['oauth_token'] = array_merge($token, $data);
@@ -480,7 +527,9 @@ class rcmail_oauth
             }
 
             // enforce XOAUTH2 authorization type
-            $options['auth_type'] = 'XOAUTH2';
+            if (isset($_SESSION['oauth_token']['auth_type'])) {
+                $options['auth_type'] = $_SESSION['oauth_token']['auth_type'];
+            }
         }
 
         return $options;
@@ -498,10 +547,13 @@ class rcmail_oauth
             // check token validity
             $this->check_token_validity($_SESSION['oauth_token']);
 
-            // enforce XOAUTH2 authorization type
             $options['smtp_user'] = '%u';
             $options['smtp_pass'] = '%p';
-            $options['smtp_auth_type'] = 'XOAUTH2';
+
+            // enforce XOAUTH2 authorization type
+            if (isset($_SESSION['oauth_token']['auth_type'])) {
+                $options['smtp_auth_type'] = $_SESSION['oauth_token']['auth_type'];
+            }
         }
 
         return $options;
@@ -520,7 +572,9 @@ class rcmail_oauth
             $this->check_token_validity($_SESSION['oauth_token']);
 
             // enforce XOAUTH2 authorization type
-            $options['auth_type'] = 'XOAUTH2';
+            if (isset($_SESSION['oauth_token']['auth_type'])) {
+                $options['auth_type'] = $_SESSION['oauth_token']['auth_type'];
+            }
         }
 
         return $options;

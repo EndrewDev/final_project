@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see http://www.gnu.org/licenses/.
+ * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
 class rcube_sieve_engine
@@ -248,14 +248,14 @@ class rcube_sieve_engine
         if ($script_name === null || $script_name === '') {
             // get (first) active script
             if (!empty($this->active)) {
-               $script_name = $this->active[0];
+                $script_name = $this->active[0];
             }
-            else if ($list) {
+            else if (!empty($list)) {
                 $script_name = $list[0];
             }
             else {
                 // if script does not exist create one with default content
-                $this->create_default_script();
+                $script_name = $this->create_default_script();
             }
         }
 
