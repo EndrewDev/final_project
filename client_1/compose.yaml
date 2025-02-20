@@ -22,13 +22,15 @@ services:
     volumes:
       - wp_data:/var/www/html
     ports:
-      - 80:80
+      - 7070:80
     restart: always
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_PASSWORD=wordpress
       - WORDPRESS_DB_NAME=wordpress
+    # networks:
+    #   - asa-networks
 
 # web2 config
   db2:
@@ -53,15 +55,15 @@ services:
     volumes:
       - wp_data2:/var/www/html
     ports:
-      - 9090:80
+      - 6060:80
     restart: always
     environment:
       - WORDPRESS_DB_HOST=db2
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_PASSWORD=wordpress
       - WORDPRESS_DB_NAME=wordpress
-
-
+    # networks:
+    #   - asa-networks
 
 volumes:
   # web1
@@ -71,4 +73,6 @@ volumes:
   db_data2:
   wp_data2:
 
-
+# networks:
+#   asa-networks:
+#     external: true
