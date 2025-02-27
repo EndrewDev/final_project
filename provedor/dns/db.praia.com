@@ -1,10 +1,10 @@
 ;
-; BIND data file for welcome.com
+; BIND data file for praia.com
 ;
-$ORIGIN welcome.com.
+$ORIGIN praia.com.
 $TTL    604800
 
-@       IN  SOA ns.welcome.com. admin.welcome.com. (
+@       IN  SOA ns.praia.com. admin.praia.com. (
                 2024060101      ; Serial (formato AAAAMMDDXX)
                 3600            ; Refresh
                 1800            ; Retry
@@ -12,7 +12,7 @@ $TTL    604800
                 86400 )         ; Negative Cache TTL
 
 ; Nameservers
-@       IN  NS  ns.welcome.com.
+@       IN  NS  ns.praia.com.
 
 ; Endereços IP
 @       IN  A    192.168.56.1       ; IP do servidor DNS (provedor)

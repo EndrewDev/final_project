@@ -10,6 +10,15 @@ zone "welcome.com.br"{
     };
 };
 
+zone "mystory.com.br"{
+    type master;
+    file "/etc/bind/db.mystory.com.br";
+    allow-transfer {
+        127.0.0.1;
+    };
+};
+
+
 // Consider adding the 1918 zones here, if they are not used in your
 // organization
 //include "/etc/bind/zones.rfc1918";

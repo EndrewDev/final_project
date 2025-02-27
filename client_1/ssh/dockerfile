@@ -1,0 +1,25 @@
+FROM ubuntu:latest
+
+RUN apt update && apt install -y openssh-server
+RUN mkdir /var/run/sshd
+
+# Add User
+# Add User
+RUN useradd -m areiapreta
+RUN useradd -m miami
+RUN useradd -m artista
+RUN useradd -m pipa
+# Set user passord
+RUN echo "areiapreta:redes"|chpasswd
+RUN echo "miami:redes"|chpasswd
+RUN echo "artista:redes"|chpasswd
+RUN echo "pipa:redes"|chpasswd
+
+# tirando login de root
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+
+RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
