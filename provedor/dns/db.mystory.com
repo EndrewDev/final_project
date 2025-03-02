@@ -15,9 +15,9 @@ $TTL    604800
 @       IN  NS  ns.mystory.com.
 
 ; Endereços IP
-@       IN  A    192.168.56.1       ; IP do servidor DNS (provedor)
-ns      IN  A    192.168.56.1       ; Nameserver
-mail    IN  A    192.168.56.1       ; Servidor de e-mail
-www     IN  A    192.168.56.1       ; Servidor web
-web     IN  A    192.168.56.1       ; Servidores web
+@       IN  A    192.168.0.8       ; IP do servidor DNS (provedor)
+ns      IN  A    192.168.0.8       ; Nameserver
+mail    IN  A    192.168.0.8       ; Servidor de e-mail
+www     IN  A    192.168.0.8       ; Servidor web
+web     IN  A    192.168.0.8       ; Servidores web
 proxy   IN  CNAME www           ; Proxy reverso (aponta para www)

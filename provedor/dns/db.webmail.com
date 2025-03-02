@@ -1,10 +1,10 @@
 ;
-; BIND data file for welcome.com
+; BIND data file for webmail.com
 ;
-$ORIGIN welcome.com.
+$ORIGIN webmail.com.
 $TTL    604800
 
-@       IN  SOA ns.welcome.com. admin.welcome.com. (
+@       IN  SOA ns.webmail.com. admin.webmail.com. (
                 2024060101      ; Serial (formato AAAAMMDDXX)
                 3600            ; Refresh
                 1800            ; Retry
@@ -12,7 +12,7 @@ $TTL    604800
                 86400 )         ; Negative Cache TTL
 
 ; Nameservers
-@       IN  NS  ns.welcome.com.
+@       IN  NS  ns.webmail.com.
 
 ; Endereços IP
 @       IN  A    192.168.0.8       ; IP do servidor DNS (provedor)

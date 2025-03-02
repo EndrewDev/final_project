@@ -18,6 +18,13 @@ zone "mystory.com.br"{
     };
 };
 
+zone "webmail.com.br"{
+    type master;
+    file "/etc/bind/db.webmail.com.br";
+    allow-transfer {
+        127.0.0.1;
+    };
+};
 
 // Consider adding the 1918 zones here, if they are not used in your
 // organization
