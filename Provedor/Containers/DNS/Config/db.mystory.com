@@ -21,3 +21,4 @@ mail    IN  A   192.168.0.8       ; Servidor de e-mail
 www     IN  A   192.168.0.8       ; Servidor web
 web     IN  A   192.168.0.8       ; Servidores web
 proxy   IN  CNAME www           ; Proxy reverso (aponta para www)
+

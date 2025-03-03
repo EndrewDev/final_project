@@ -5,7 +5,7 @@ $ORIGIN domeio.com.
 $TTL	604800
 
 @   IN  SOA ns.domeio.com. root.domeio.com. (
-		2024030401		; Serial
+		 2024030401		; Serial
 			 604800		; Refresh
 			  86400		; Retry
 			2419200		; Expire

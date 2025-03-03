@@ -51,7 +51,7 @@ services:
       context: ./Containers/SSH
       dockerfile: Dockerfile
     image: ssh
-    container_name: ssh-redinha
+    container_name: ssh-welcome
     ports:
       - "2222:22"
     networks:
@@ -61,7 +61,7 @@ services:
       context: ./Containers/PROXY
       dockerfile: Dockerfile
     image: proxy
-    container_name: proxy-redinha
+    container_name: proxy-welcome
     depends_on:
       - wordpress
       - wordpress-2

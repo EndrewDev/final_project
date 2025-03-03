@@ -23,9 +23,3 @@ zone "mystory.com" {
     file "/etc/bind/db.mystory.com";
     allow-transfer { 192.168.0.8; };
 };
-
-options {
-    allow-query { any; }; // Permite consultas de qualquer cliente
-    allow-query-cache { any; }; // Permite consultas ao cache de qualquer cliente
-};
-

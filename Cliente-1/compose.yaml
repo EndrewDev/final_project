@@ -62,7 +62,7 @@ services:
       context: ./Containers/PROXY
       dockerfile: Dockerfile
     image: proxy
-    container_name: proxy-1
+    container_name: proxy-mystory
     depends_on:
       - wordpress-1
       - wordpress-2
