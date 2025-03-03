@@ -12,8 +12,8 @@ services:
       - beach-network
     volumes:
       - ./Containers/DNS/Config/db.domeio.com:/etc/bind/db.domeio.com
-      - ./Containers/DNS/Config/db.redinha.com:/etc/bind/db.redinha.com
-      - ./Containers/DNS/Config/db.miami.com:/etc/bind/db.miami.com
+      - ./Containers/DNS/Config/db.welcome.com:/etc/bind/db.welcome.com
+      - ./Containers/DNS/Config/db.mystory.com:/etc/bind/db.mystory.com
       - ./Containers/DNS/Config/named.conf.local:/etc/bind/named.conf.local
     
   proxy:
