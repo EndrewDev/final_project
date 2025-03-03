@@ -56,7 +56,7 @@ services:
       - "2222:22"
     networks:
       - beach-network
-  proxy-redinha:
+  proxy-welcome:
     build:
       context: ./Containers/PROXY
       dockerfile: Dockerfile

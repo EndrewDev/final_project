@@ -57,7 +57,7 @@ services:
     networks:
       - beach-network
 
-  proxy-redinha:
+  proxy-mystory:
     build:
       context: ./Containers/PROXY
       dockerfile: Dockerfile
