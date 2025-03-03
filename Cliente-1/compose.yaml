@@ -1,0 +1,88 @@
+services:    
+  db-1:
+    image: mariadb:latest
+    container_name: db-1
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass
+    networks:
+      - beach-network
+    volumes:
+      - db_data:/var/lib/mysql
+#Containers de wordpress, um e dois. (usados para balancear carga primariamente)
+  wordpress-1:
+    image: wordpress:latest
+    container_name: wordpress-1
+    depends_on:
+      - db-1
+    restart: always
+    tty: true
+    environment:
+      WORDPRESS_DB_HOST: db-1
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+      - beach-network
+      - proxy-praia
+    volumes:
+      - wordpress_data:/var/www/html
+  wordpress-2:
+    image: wordpress:latest
+    container_name: wordpress-2
+    depends_on:
+      - db-1
+    restart: always
+    tty: true
+    environment:
+      WORDPRESS_DB_HOST: db-1
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+      - beach-network
+      - proxy-praia
+    volumes:
+      - wordpress_data:/var/www/html
+  ssh:
+    build:
+      context: ./Containers/SSH
+      dockerfile: Dockerfile
+    image: ssh
+    container_name: ssh-1
+    ports:
+      - "2223:22"
+    networks:
+      - beach-network
+
+  proxy-redinha:
+    build:
+      context: ./Containers/PROXY
+      dockerfile: Dockerfile
+    image: proxy
+    container_name: proxy-1
+    depends_on:
+      - wordpress-1
+      - wordpress-2
+    networks:
+      - beach-network
+      - proxy-praia
+    dns:
+      - 192.168.0.8 # Adiciona o servidor DNS
+    volumes:
+      - ./Containers/PROXY/Config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./Containers/PROXY/Config/nginx.conf:/etc/nginx/nginx.conf
+      - ./Containers/PROXY/Config/ssl:/etc/nginx/ssl
+
+volumes:
+  db_data:
+  wordpress_data:
+
+#Redes {lembre-se sempre de criar a rede proxy praia com docker network create proxy-praia}
+networks:
+  beach-network:
+    driver: bridge
+  proxy-praia:
+    external: true

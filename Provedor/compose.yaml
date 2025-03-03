@@ -1,0 +1,90 @@
+services:    
+  dns:
+    build:
+      context: ./Containers/DNS
+      dockerfile: Dockerfile
+    image: dns
+    container_name: dns
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - beach-network
+    volumes:
+      - ./Containers/DNS/Config/db.domeio.com:/etc/bind/db.domeio.com
+      - ./Containers/DNS/Config/db.redinha.com:/etc/bind/db.redinha.com
+      - ./Containers/DNS/Config/db.miami.com:/etc/bind/db.miami.com
+      - ./Containers/DNS/Config/named.conf.local:/etc/bind/named.conf.local
+    
+  proxy:
+    build:
+      context: ./Containers/PROXY
+      dockerfile: Dockerfile
+    image: proxy
+    container_name: proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - dns
+    networks:
+      - beach-network
+      - proxy-praia
+    volumes:
+      - ./Containers/PROXY/Config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./Containers/PROXY/Config/nginx.conf:/etc/nginx/nginx.conf
+      - ./Containers/PROXY/Config/ssl:/etc/nginx/ssl
+#    restart: always  # Adiciona a diretiva de reinício automático
+  
+  email:
+    build:
+      context: ./Containers/MAIL
+      dockerfile: Dockerfile
+    image: email
+    container_name: email
+    ports:
+      - "25:25/tcp"
+      - "587:587/tcp"
+      - "110:110/tcp"
+      - "143:143/tcp"
+      - "465:465/tcp" # Adicione esta linha para permitir conexões seguras na porta 465
+    networks:
+      - beach-network
+    volumes:
+      - ./Containers/MAIL/Config/main.cf:/etc/postfix/main.cf
+      - ./Containers/MAIL/Config/dovecot.conf:/etc/dovecot/dovecot.conf
+      - ./Containers/MAIL/Config/10-master.conf:/etc/dovecot/conf.d/10-master.conf
+      - ./Containers/MAIL/Data:/home
+      - ./Containers/MAIL/ssl:/etc/dovecot/ssl
+
+  webmail:
+    image: roundcube/roundcubemail:latest
+    container_name: webmail
+    networks:
+      - beach-network
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=tls://email:143
+      - ROUNDCUBEMAIL_SMTP_SERVER=tls://email:25
+      - ROUNDCUBEMAIL_DB_TYPE=sqlite
+    depends_on:
+      - email
+    volumes:
+      - ./Containers/WEBMAIL/Config/config.inc.php:/var/roundcube/config/config.inc.php
+      - ./Containers/MAIL/Config/ssl/email.crt:/etc/ssl/certs/email.crt:ro
+
+  ssh:
+    build:
+      context: ./Containers/SSH
+      dockerfile: Dockerfile
+    image: ssh
+    container_name: ssh
+    ports:
+      - "22:22"
+    networks:
+      - beach-network
+
+networks:
+  beach-network:
+    driver: bridge
+  proxy-praia:
+    external: true

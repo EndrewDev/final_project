@@ -1,5 +1,0 @@
-/composer.lock
-/vendor/
-
-/test-composer/*
-!/test-composer/composer.json
