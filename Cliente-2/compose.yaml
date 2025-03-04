@@ -12,9 +12,9 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 #Containers de wordpress, um e dois. (usados para balancear carga primariamente)
-  wordpress:
+  wordpress-welcome:
     image: wordpress:latest
-    container_name: wordpress
+    container_name: wordpress-welcome
     depends_on:
       - db
     restart: always
@@ -29,9 +29,9 @@ services:
       - proxy-praia
     volumes:
       - wordpress_data:/var/www/html
-  wordpress-2:
+  wordpress-2-welcome:
     image: wordpress:latest
-    container_name: wordpress-2
+    container_name: wordpress-2-welcome
     depends_on:
       - db
     restart: always
@@ -46,9 +46,10 @@ services:
       - proxy-praia
     volumes:
       - wordpress_data:/var/www/html
+  
   ssh:
     build:
-      context: /home/endrew/Documentos/asa/final_project/Provedor/Containers/SSH
+      context: ./Containers/SSH
       dockerfile: Dockerfile
     image: ssh
     container_name: ssh-welcome
@@ -56,24 +57,25 @@ services:
       - "2222:22"
     networks:
       - beach-network
+  
   proxy-welcome:
     build:
-      context: /home/endrew/Documentos/asa/final_project/Provedor/Containers/PROXY
+      context: ./Containers/PROXY
       dockerfile: Dockerfile
     image: proxy
     container_name: proxy-welcome
     depends_on:
-      - wordpress
-      - wordpress-2
+      - wordpress-welcome 
+      - wordpress-2-welcome
     networks:
       - beach-network
       - proxy-praia
     dns:
       -  192.168.0.8 # Adiciona o servidor DNS
     volumes:
-      - /home/endrew/Documentos/asa/final_project/Provedor/Containers/PROXY/Config/default.conf:/etc/nginx/conf.d/default.conf
-      - /home/endrew/Documentos/asa/final_project/Provedor/Containers/PROXY/Config/nginx.conf:/etc/nginx/nginx.conf
-      - /home/endrew/Documentos/asa/final_project/Provedor/Containers/PROXY/Config/ssl:/etc/nginx/ssl
+      - ./Containers/PROXY/Config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./Containers/PROXY/Config/nginx.conf:/etc/nginx/nginx.conf
+      - ./Containers/PROXY/Config/ssl:/etc/nginx/ssl
       
 volumes:
   db_data:
