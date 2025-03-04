@@ -23,3 +23,4 @@ zone "mystory.com" {
     file "/etc/bind/db.mystory.com";
     allow-transfer { 192.168.0.8; };
 };
+

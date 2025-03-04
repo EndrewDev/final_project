@@ -20,4 +20,4 @@ ns      IN  A    192.168.0.8       ; Nameserver
 mail    IN  A    192.168.0.8       ; Servidor de e-mail
 www     IN  A    192.168.0.8       ; Servidor web
 web     IN  A    192.168.0.8       ; Servidores web
-proxy-welcome   IN  CNAME www           ; Proxy reverso (aponta para www)
+proxy   IN  CNAME www           ; Proxy reverso (aponta para www)
